@@ -1,10 +1,13 @@
 package main
 
-func main() {
-	app.Run()
-}
+import (
+	app "github/eugene-krivtsov/idler-email/internal/app/idler-email"
+)
 
-type Message struct {
-	Name    string
-	Message string
+const (
+	configPath = "config/config"
+)
+
+func main() {
+	app.Run(configPath)
 }
