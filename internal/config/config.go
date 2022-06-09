@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/eugene-krivtsov/idler/pkg/db/mongo"
 	"github.com/spf13/viper"
 	. "github/eugene-krivtsov/idler-email/pkg/mail"
 	"strings"
@@ -8,7 +9,7 @@ import (
 
 type (
 	Config struct {
-		Mongo MongoConfig
+		Mongo mongo.Config
 		Mail  SenderConfig
 	}
 

@@ -73,7 +73,7 @@ func getSubjectByPath(path string) string {
 	return separateName[0]
 }
 
-func (s *SmtpSender) Send(toEmail, path string, fields any) {
+func (s *SmtpSender) Send(toEmail, path string, fields any) error {
 	subject := getSubjectByPath(path)
 
 	messageTemplate := s.fillEmailTemplate(path, fields)
@@ -90,40 +90,42 @@ func (s *SmtpSender) Send(toEmail, path string, fields any) {
 
 	conn, err := tls.Dial(protocol, s.SenderConfig.ServerName, tlsConfig)
 	if err != nil {
-		log.Panic(err)
+		return err
 	}
 
 	a, err := smtp.NewClient(conn, serverHost)
 	if err != nil {
-		log.Panic(err)
+		return err
 	}
 
 	if err = a.Auth(auth); err != nil {
-		log.Panic(err)
+		return err
 	}
 
 	if err = a.Mail(s.SenderConfig.SenderAddress); err != nil {
-		log.Panic(err)
+		return err
 	}
 
 	if err = a.Rcpt(toEmail); err != nil {
-		log.Panic(err)
+		return err
 	}
 
 	w, err := a.Data()
 	if err != nil {
-		log.Panic(err)
+		return err
 	}
 
 	if _, err = w.Write(content); err != nil {
-		log.Panic(err)
+		return err
 	}
 
 	if err := w.Close(); err != nil {
-		log.Panic(err)
+		return err
 	}
 
 	if err = a.Quit(); err != nil {
-		log.Panic(err)
+		return err
 	}
+
+	return nil
 }

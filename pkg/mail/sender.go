@@ -9,5 +9,5 @@ type SenderConfig struct {
 }
 
 type Sender interface {
-	Send(toEmail, path string, fields any)
+	Send(toEmail, path string, fields any) error
 }
