@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/eugene-krivtsov/idler/pkg/db/mongo"
+	"github.com/eugene-krivtsov/idler/pkg/db/postgres"
 	"github.com/spf13/viper"
 	. "github/eugene-krivtsov/idler-email/pkg/mail"
 	"strings"
@@ -9,8 +10,9 @@ import (
 
 type (
 	Config struct {
-		Mongo mongo.Config
-		Mail  SenderConfig
+		Postgres postgres.Config
+		Mongo    mongo.Config
+		Mail     SenderConfig
 	}
 
 	MongoConfig struct {
@@ -53,6 +55,10 @@ func parseConfigFile(filepath string) error {
 }
 
 func parseEnv() error {
+	if err := parsePostgresEnv(); err != nil {
+		return err
+	}
+
 	if err := parseMongoEnv(); err != nil {
 		return err
 	}
@@ -62,6 +68,31 @@ func parseEnv() error {
 	}
 
 	return nil
+}
+
+func parsePostgresEnv() error {
+
+	if err := viper.BindEnv("postgres.host", "POSTGRES_HOST"); err != nil {
+		return err
+	}
+
+	if err := viper.BindEnv("postgres.port", "POSTGRES_PORT"); err != nil {
+		return err
+	}
+
+	if err := viper.BindEnv("postgres.db", "POSTGRES_DB"); err != nil {
+		return err
+	}
+
+	if err := viper.BindEnv("postgres.user", "POSTGRES_USER"); err != nil {
+		return err
+	}
+
+	if err := viper.BindEnv("postgres.password", "POSTGRES_PASSWORD"); err != nil {
+		return err
+	}
+
+	return viper.BindEnv("postgres.sslmode", "POSTGRES_SSLMODE")
 }
 
 func parseMongoEnv() error {
@@ -113,10 +144,20 @@ func unmarshalConfig(cfg *Config) error {
 		return err
 	}
 
+	if err := viper.UnmarshalKey("postgres", &cfg.Postgres); err != nil {
+		return err
+	}
+
 	return nil
 }
 
 func setFromEnv(cfg *Config) {
+	cfg.Postgres.Host = viper.GetString("postgres.host")
+	cfg.Postgres.Port = viper.GetString("postgres.port")
+	cfg.Postgres.DB = viper.GetString("postgres.db")
+	cfg.Postgres.User = viper.GetString("postgres.user")
+	cfg.Postgres.Password = viper.GetString("postgres.password")
+
 	cfg.Mail.ServerName = viper.GetString("mail.server")
 	cfg.Mail.Username = viper.GetString("mail.user")
 	cfg.Mail.Password = viper.GetString("mail.password")

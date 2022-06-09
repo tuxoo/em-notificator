@@ -9,5 +9,7 @@ type SenderConfig struct {
 }
 
 type Sender interface {
-	Send(toEmail, path string, fields any) error
+	GetSubjectByPath(path string) string
+	FillEmailTemplate(path string, fields any) string
+	Send(toEmail, path, fields string) error
 }

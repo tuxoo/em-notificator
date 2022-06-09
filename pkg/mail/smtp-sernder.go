@@ -27,7 +27,7 @@ func NewSmtpSender(senderConfig SenderConfig) *SmtpSender {
 	}
 }
 
-func (s *SmtpSender) fillEmailTemplate(path string, fields any) string {
+func (s *SmtpSender) FillEmailTemplate(path string, fields any) string {
 	t, err := template.ParseFiles(path)
 	if err != nil {
 		log.Panic(err)
@@ -41,7 +41,7 @@ func (s *SmtpSender) fillEmailTemplate(path string, fields any) string {
 	return buffer.String()
 }
 
-func (s *SmtpSender) createContent(toEmail string, subject string, text string) []byte {
+func (s *SmtpSender) createContent(toEmail, subject, text string) []byte {
 	senderMail := mail.Address{
 		Name:    s.SenderConfig.SenderName,
 		Address: s.SenderConfig.SenderAddress,
@@ -67,17 +67,14 @@ func (s *SmtpSender) createContent(toEmail string, subject string, text string) 
 	return []byte(header + "\r\n" + text)
 }
 
-func getSubjectByPath(path string) string {
+func (s *SmtpSender) GetSubjectByPath(path string) string {
 	fileName := filepath.Base(path)
 	separateName := strings.Split(fileName, ".")
 	return separateName[0]
 }
 
-func (s *SmtpSender) Send(toEmail, path string, fields any) error {
-	subject := getSubjectByPath(path)
-
-	messageTemplate := s.fillEmailTemplate(path, fields)
-	content := s.createContent(toEmail, subject, messageTemplate)
+func (s *SmtpSender) Send(toEmail, subject, template string) error {
+	content := s.createContent(toEmail, subject, template)
 
 	serverHost, _, _ := net.SplitHostPort(s.SenderConfig.ServerName)
 
