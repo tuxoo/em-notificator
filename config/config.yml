@@ -8,3 +8,6 @@ mongo:
   host: localhost
   port: 27017
   dbname: idler
+
+grpc:
+  port: 8088

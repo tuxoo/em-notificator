@@ -63,13 +63,11 @@ func Run(configPath string) {
 		Sender:               sender,
 	})
 
-	//services.MailService.Send(context.Background(), "kia-77@mail.ru", "web/[Idler]Confirm.html")
-
 	grpcHandlers := handler.NewHandler(services.MailService)
 	grpcServer := server.NewGrpcServer(grpcHandlers.MailSenderHandler)
 
 	go func() {
-		if err := grpcServer.Run(8080); err != nil {
+		if err := grpcServer.Run(cfg.Grpc.Port); err != nil {
 			logrus.Errorf("error occurred while running gRPC server: %s\n", err.Error())
 		}
 	}()
@@ -89,6 +87,4 @@ func Run(configPath string) {
 	if err := mongoClient.Disconnect(context.Background()); err != nil {
 		logrus.Errorf("error occured on mongo connection close: %s", err.Error())
 	}
-
-	// TODO: close smtp
 }

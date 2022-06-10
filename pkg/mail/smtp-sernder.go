@@ -83,8 +83,6 @@ func (s *SmtpSender) ParsePath(path string) (sender, subject string) {
 	sender = strings.Trim(sender, "[")
 	sender = strings.Trim(sender, "]")
 
-	fmt.Println(sender)
-
 	strings.Split(fileName, ".")
 	separateName := strings.Split(fileName, ".")
 	subject = separateName[0]

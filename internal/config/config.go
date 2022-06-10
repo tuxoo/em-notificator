@@ -13,6 +13,7 @@ type (
 		Postgres postgres.Config
 		Mongo    mongo.Config
 		Mail     SenderConfig
+		Grpc     GrpcConfig
 	}
 
 	MongoConfig struct {
@@ -21,6 +22,10 @@ type (
 		User     string
 		Password string
 		DB       string `mapstructure:"db"`
+	}
+
+	GrpcConfig struct {
+		Port int
 	}
 )
 
@@ -67,7 +72,16 @@ func parseEnv() error {
 		return err
 	}
 
+	if err := parseLineEnv("grpc", "port"); err != nil {
+		return err
+	}
+
 	return nil
+}
+
+func parseLineEnv(prefix, name string) error {
+	viper.SetEnvPrefix(prefix)
+	return viper.BindEnv(name)
 }
 
 func parsePostgresEnv() error {
@@ -148,6 +162,10 @@ func unmarshalConfig(cfg *Config) error {
 		return err
 	}
 
+	if err := viper.UnmarshalKey("grpc", &cfg.Grpc); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -168,4 +186,6 @@ func setFromEnv(cfg *Config) {
 	cfg.Mongo.User = viper.GetString("mongo.user")
 	cfg.Mongo.Password = viper.GetString("mongo.password")
 	cfg.Mongo.DB = viper.GetString("mongo.db")
+
+	cfg.Grpc.Port = viper.GetInt("grpc.port")
 }

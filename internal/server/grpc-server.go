@@ -12,14 +12,14 @@ const (
 )
 
 type GrpcServer struct {
-	grpcServer  *grpc.Server
-	MailHandler api.MailSenderServiceServer
+	grpcServer        *grpc.Server
+	MailSenderHandler api.MailSenderServiceServer
 }
 
-func NewGrpcServer(mailHandler api.MailSenderServiceServer) *GrpcServer {
+func NewGrpcServer(mailSenderHandler api.MailSenderServiceServer) *GrpcServer {
 	return &GrpcServer{
-		grpcServer:  grpc.NewServer(),
-		MailHandler: mailHandler,
+		grpcServer:        grpc.NewServer(),
+		MailSenderHandler: mailSenderHandler,
 	}
 }
 
@@ -29,7 +29,7 @@ func (s *GrpcServer) Run(port int) error {
 		return err
 	}
 
-	api.RegisterMailSenderServiceServer(s.grpcServer, s.MailHandler)
+	api.RegisterMailSenderServiceServer(s.grpcServer, s.MailSenderHandler)
 
 	if err := s.grpcServer.Serve(lis); err != nil {
 		return err
