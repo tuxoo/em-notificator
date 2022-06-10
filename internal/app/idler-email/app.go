@@ -10,8 +10,13 @@ import (
 	"github/eugene-krivtsov/idler-email/internal/config"
 	mongorepository "github/eugene-krivtsov/idler-email/internal/repository/mongo"
 	postgresrepository "github/eugene-krivtsov/idler-email/internal/repository/postgres"
+	"github/eugene-krivtsov/idler-email/internal/server"
 	"github/eugene-krivtsov/idler-email/internal/service"
+	"github/eugene-krivtsov/idler-email/internal/transport/grpc/handler"
 	"github/eugene-krivtsov/idler-email/pkg/mail"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 func Run(configPath string) {
@@ -58,5 +63,32 @@ func Run(configPath string) {
 		Sender:               sender,
 	})
 
-	services.MailService.Send(context.Background(), "kia-77@mail.ru", "web/[Idler]Confirm.html")
+	//services.MailService.Send(context.Background(), "kia-77@mail.ru", "web/[Idler]Confirm.html")
+
+	grpcHandlers := handler.NewHandler(services.MailService)
+	grpcServer := server.NewGrpcServer(grpcHandlers.MailSenderHandler)
+
+	go func() {
+		if err := grpcServer.Run(8080); err != nil {
+			logrus.Errorf("error occurred while running gRPC server: %s\n", err.Error())
+		}
+	}()
+
+	logrus.Print("IDLER mail service application has started")
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
+	<-quit
+
+	grpcServer.Shutdown()
+
+	if err := postgresDB.Close(); err != nil {
+		logrus.Errorf("error occured on postgres connection close: %s", err.Error())
+	}
+
+	if err := mongoClient.Disconnect(context.Background()); err != nil {
+		logrus.Errorf("error occured on mongo connection close: %s", err.Error())
+	}
+
+	// TODO: close smtp
 }

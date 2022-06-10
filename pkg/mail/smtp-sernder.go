@@ -10,11 +10,16 @@ import (
 	"net/mail"
 	"net/smtp"
 	"path/filepath"
+	"regexp"
 	"strings"
 )
 
 const (
 	protocol = "tcp"
+)
+
+var (
+	senderRegExp *regexp.Regexp
 )
 
 type SmtpSender struct {
@@ -25,6 +30,10 @@ func NewSmtpSender(senderConfig SenderConfig) *SmtpSender {
 	return &SmtpSender{
 		SenderConfig: senderConfig,
 	}
+}
+
+func init() {
+	senderRegExp = regexp.MustCompile(`\[([^\[\]]*)\]`)
 }
 
 func (s *SmtpSender) FillEmailTemplate(path string, fields any) string {
@@ -41,9 +50,9 @@ func (s *SmtpSender) FillEmailTemplate(path string, fields any) string {
 	return buffer.String()
 }
 
-func (s *SmtpSender) createContent(toEmail, subject, text string) []byte {
+func (s *SmtpSender) CreateContent(toEmail, sender, subject, text string) []byte {
 	senderMail := mail.Address{
-		Name:    s.SenderConfig.SenderName,
+		Name:    sender,
 		Address: s.SenderConfig.SenderAddress,
 	}
 
@@ -67,15 +76,22 @@ func (s *SmtpSender) createContent(toEmail, subject, text string) []byte {
 	return []byte(header + "\r\n" + text)
 }
 
-func (s *SmtpSender) GetSubjectByPath(path string) string {
+func (s *SmtpSender) ParsePath(path string) (sender, subject string) {
 	fileName := filepath.Base(path)
+
+	sender = senderRegExp.FindString(fileName)
+	sender = strings.Trim(sender, "[")
+	sender = strings.Trim(sender, "]")
+
+	fmt.Println(sender)
+
+	strings.Split(fileName, ".")
 	separateName := strings.Split(fileName, ".")
-	return separateName[0]
+	subject = separateName[0]
+	return
 }
 
-func (s *SmtpSender) Send(toEmail, subject, template string) error {
-	content := s.createContent(toEmail, subject, template)
-
+func (s *SmtpSender) Send(toEmail string, content []byte) error {
 	serverHost, _, _ := net.SplitHostPort(s.SenderConfig.ServerName)
 
 	auth := smtp.PlainAuth("", "idler.email", s.SenderConfig.Password, serverHost)

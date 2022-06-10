@@ -161,7 +161,6 @@ func setFromEnv(cfg *Config) {
 	cfg.Mail.ServerName = viper.GetString("mail.server")
 	cfg.Mail.Username = viper.GetString("mail.user")
 	cfg.Mail.Password = viper.GetString("mail.password")
-	cfg.Mail.SenderName = viper.GetString("mail.sender.name")
 	cfg.Mail.SenderAddress = viper.GetString("mail.sender.address")
 
 	cfg.Mongo.Host = viper.GetString("mongo.host")

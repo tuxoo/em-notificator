@@ -33,7 +33,7 @@ func (s *MailService) Send(ctx context.Context, toEmail, path string) error {
 		return errors.New("unknown user to confirmation")
 	}
 
-	subject := s.sender.GetSubjectByPath(path)
+	sender, subject := s.sender.ParsePath(path)
 	mailFields := dto.RegConfirmDTO{
 		User:         user.Name,
 		RegisteredAt: user.RegisteredAt.Format(time.Layout),
@@ -41,7 +41,9 @@ func (s *MailService) Send(ctx context.Context, toEmail, path string) error {
 	}
 
 	messageTemplate := s.sender.FillEmailTemplate(path, mailFields)
-	if err := s.sender.Send(toEmail, subject, messageTemplate); err != nil {
+	content := s.sender.CreateContent(toEmail, sender, subject, messageTemplate)
+
+	if err := s.sender.Send(toEmail, content); err != nil {
 		return err
 	}
 
