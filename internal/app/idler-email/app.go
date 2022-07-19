@@ -3,17 +3,17 @@ package idler_email
 import (
 	"context"
 	"fmt"
-	"github.com/eugene-krivtsov/idler/pkg/db/mongo"
-	"github.com/eugene-krivtsov/idler/pkg/db/postgres"
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
-	"github/eugene-krivtsov/idler-email/internal/config"
-	mongorepository "github/eugene-krivtsov/idler-email/internal/repository/mongo"
-	postgresrepository "github/eugene-krivtsov/idler-email/internal/repository/postgres"
-	"github/eugene-krivtsov/idler-email/internal/server"
-	"github/eugene-krivtsov/idler-email/internal/service"
-	"github/eugene-krivtsov/idler-email/internal/transport/grpc/handler"
-	"github/eugene-krivtsov/idler-email/pkg/mail"
+	"github.com/tuxoo/idler/pkg/db/mongo"
+	"github.com/tuxoo/idler/pkg/db/postgres"
+	"github/tuxoo/idler-email/internal/config"
+	mongorepository "github/tuxoo/idler-email/internal/repository/mongo"
+	postgresrepository "github/tuxoo/idler-email/internal/repository/postgres"
+	"github/tuxoo/idler-email/internal/server"
+	"github/tuxoo/idler-email/internal/service"
+	"github/tuxoo/idler-email/internal/transport/grpc/handler"
+	"github/tuxoo/idler-email/pkg/mail"
 	"os"
 	"os/signal"
 	"syscall"
@@ -37,13 +37,12 @@ func Run(configPath string) {
 
 	sender := mail.NewSmtpSender(cfg.Mail)
 
-	postgresDB, err := postgres.NewPostgresDB(postgres.Config{
+	postgresDB, err := postgres.NewPostgresPool(postgres.Config{
 		Host:     cfg.Postgres.Host,
 		Port:     cfg.Postgres.Port,
 		DB:       cfg.Postgres.DB,
 		User:     cfg.Postgres.User,
 		Password: cfg.Postgres.Password,
-		SSLMode:  cfg.Postgres.SSLMode,
 	})
 	if err != nil {
 		logrus.Fatalf("error initializing postgres: %s", err.Error())

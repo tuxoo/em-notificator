@@ -3,11 +3,10 @@ package service
 import (
 	"context"
 	"errors"
-	"github/eugene-krivtsov/idler-email/internal/model/dto"
-	"github/eugene-krivtsov/idler-email/internal/model/entity"
-	"github/eugene-krivtsov/idler-email/internal/repository/mongo"
-	postgres_repository "github/eugene-krivtsov/idler-email/internal/repository/postgres"
-	"github/eugene-krivtsov/idler-email/pkg/mail"
+	"github/tuxoo/idler-email/internal/model/dto"
+	"github/tuxoo/idler-email/internal/model/entity"
+	postgres_repository "github/tuxoo/idler-email/internal/repository/postgres"
+	"github/tuxoo/idler-email/pkg/mail"
 	"time"
 )
 

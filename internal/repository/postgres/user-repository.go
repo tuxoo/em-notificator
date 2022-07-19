@@ -3,7 +3,7 @@ package postgres_repository
 import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
-	"github/eugene-krivtsov/idler-email/internal/model/dto"
+	"github/tuxoo/idler-email/internal/model/dto"
 )
 
 type UserRepository struct {

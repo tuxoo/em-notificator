@@ -2,7 +2,7 @@ package mongo_repository
 
 import (
 	"context"
-	"github/eugene-krivtsov/idler-email/internal/model/entity"
+	"github/tuxoo/idler-email/internal/model/entity"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 

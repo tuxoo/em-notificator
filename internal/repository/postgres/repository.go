@@ -2,7 +2,7 @@ package postgres_repository
 
 import (
 	"github.com/jmoiron/sqlx"
-	"github/eugene-krivtsov/idler-email/internal/model/dto"
+	"github/tuxoo/idler-email/internal/model/dto"
 )
 
 const (

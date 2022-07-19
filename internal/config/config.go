@@ -1,10 +1,10 @@
 package config
 
 import (
-	"github.com/eugene-krivtsov/idler/pkg/db/mongo"
-	"github.com/eugene-krivtsov/idler/pkg/db/postgres"
 	"github.com/spf13/viper"
-	. "github/eugene-krivtsov/idler-email/pkg/mail"
+	"github.com/tuxoo/idler/pkg/db/mongo"
+	"github.com/tuxoo/idler/pkg/db/postgres"
+	. "github/tuxoo/idler-email/pkg/mail"
 	"strings"
 )
 

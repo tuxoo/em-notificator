@@ -1,7 +1,7 @@
 package main
 
 import (
-	app "github/eugene-krivtsov/idler-email/internal/app/idler-email"
+	app "github/tuxoo/idler-email/internal/app/idler-email"
 )
 
 const (

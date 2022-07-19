@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	"github/eugene-krivtsov/idler-email/internal/model/dto"
-	postgres_repository "github/eugene-krivtsov/idler-email/internal/repository/postgres"
+	"github/tuxoo/idler-email/internal/model/dto"
+	postgres_repository "github/tuxoo/idler-email/internal/repository/postgres"
 )
 
 type UserService struct {

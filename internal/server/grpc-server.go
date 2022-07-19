@@ -2,7 +2,7 @@ package server
 
 import (
 	"fmt"
-	"github/eugene-krivtsov/idler-email/internal/transport/grpc/api"
+	"github/tuxoo/idler-email/internal/transport/grpc/api"
 	"google.golang.org/grpc"
 	"net"
 )

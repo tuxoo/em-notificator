@@ -2,10 +2,9 @@ package service
 
 import (
 	"context"
-	"github/eugene-krivtsov/idler-email/internal/model/dto"
-	"github/eugene-krivtsov/idler-email/internal/repository/mongo"
-	postgres_repository "github/eugene-krivtsov/idler-email/internal/repository/postgres"
-	"github/eugene-krivtsov/idler-email/pkg/mail"
+	"github/tuxoo/idler-email/internal/model/dto"
+	postgres_repository "github/tuxoo/idler-email/internal/repository/postgres"
+	"github/tuxoo/idler-email/pkg/mail"
 )
 
 type Mails interface {
