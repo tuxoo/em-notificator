@@ -3,7 +3,7 @@
 proto-gen:
 	protoc  --go_out=internal/transport/grpc --go_opt=paths=import \
 	 --go-grpc_out=internal/transport/grpc --go-grpc_opt=paths=import \
-	  internal/transport/grpc/proto/idler-email.proto
+	  internal/transport/grpc/proto/em-notificator.proto
 
 build:
-	go build -o ./.bin/app ./cmd/idler-email/main.go
+	go build -o ./.bin/app ./cmd/em-notificator/main.go

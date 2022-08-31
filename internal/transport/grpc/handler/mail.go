@@ -2,9 +2,9 @@ package handler
 
 import (
 	"context"
-	"github/tuxoo/idler-email/internal/model/entity"
-	"github/tuxoo/idler-email/internal/service"
-	"github/tuxoo/idler-email/internal/transport/grpc/api"
+	"github/tuxoo/em-notificator/internal/model/entity"
+	"github/tuxoo/em-notificator/internal/service"
+	"github/tuxoo/em-notificator/internal/transport/grpc/api"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"

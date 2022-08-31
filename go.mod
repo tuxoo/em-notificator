@@ -1,4 +1,4 @@
-module github/tuxoo/idler-email
+module github/tuxoo/em-notificator
 
 go 1.18
 

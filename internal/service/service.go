@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"github/tuxoo/idler-email/pkg/mail"
+	"github/tuxoo/em-notificator/pkg/mail"
 )
 
 type Mails interface {

@@ -1,13 +1,13 @@
-package idler_email
+package em_notificator
 
 import (
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
-	"github/tuxoo/idler-email/internal/config"
-	"github/tuxoo/idler-email/internal/server"
-	"github/tuxoo/idler-email/internal/service"
-	"github/tuxoo/idler-email/internal/transport/grpc/handler"
-	"github/tuxoo/idler-email/pkg/mail"
+	"github/tuxoo/em-notificator/internal/config"
+	"github/tuxoo/em-notificator/internal/server"
+	"github/tuxoo/em-notificator/internal/service"
+	"github/tuxoo/em-notificator/internal/transport/grpc/handler"
+	"github/tuxoo/em-notificator/pkg/mail"
 	"os"
 	"os/signal"
 	"syscall"

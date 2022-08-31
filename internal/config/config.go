@@ -2,7 +2,7 @@ package config
 
 import (
 	"github.com/spf13/viper"
-	. "github/tuxoo/idler-email/pkg/mail"
+	. "github/tuxoo/em-notificator/pkg/mail"
 	"strings"
 )
 

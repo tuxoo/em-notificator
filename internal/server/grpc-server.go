@@ -2,7 +2,7 @@ package server
 
 import (
 	"fmt"
-	"github/tuxoo/idler-email/internal/transport/grpc/api"
+	"github/tuxoo/em-notificator/internal/transport/grpc/api"
 	"google.golang.org/grpc"
 	"net"
 )

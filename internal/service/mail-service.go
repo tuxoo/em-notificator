@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	"github/tuxoo/idler-email/internal/model/dto"
-	"github/tuxoo/idler-email/pkg/mail"
+	"github/tuxoo/em-notificator/internal/model/dto"
+	"github/tuxoo/em-notificator/pkg/mail"
 )
 
 type MailService struct {

@@ -1,6 +1,6 @@
 package handler
 
-import "github/tuxoo/idler-email/internal/service"
+import "github/tuxoo/em-notificator/internal/service"
 
 type Handler struct {
 	MailSenderHandler *MailSenderHandler
