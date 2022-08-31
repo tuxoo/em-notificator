@@ -2,26 +2,14 @@ package config
 
 import (
 	"github.com/spf13/viper"
-	"github.com/tuxoo/idler/pkg/db/mongo"
-	"github.com/tuxoo/idler/pkg/db/postgres"
 	. "github/tuxoo/idler-email/pkg/mail"
 	"strings"
 )
 
 type (
 	Config struct {
-		Postgres postgres.Config
-		Mongo    mongo.Config
-		Mail     SenderConfig
-		Grpc     GrpcConfig
-	}
-
-	MongoConfig struct {
-		Host     string
-		Port     string
-		User     string
-		Password string
-		DB       string `mapstructure:"db"`
+		Mail SenderConfig
+		Grpc GrpcConfig
 	}
 
 	GrpcConfig struct {
@@ -60,14 +48,6 @@ func parseConfigFile(filepath string) error {
 }
 
 func parseEnv() error {
-	if err := parsePostgresEnv(); err != nil {
-		return err
-	}
-
-	if err := parseMongoEnv(); err != nil {
-		return err
-	}
-
 	if err := parseMailEnv(); err != nil {
 		return err
 	}
@@ -82,51 +62,6 @@ func parseEnv() error {
 func parseLineEnv(prefix, name string) error {
 	viper.SetEnvPrefix(prefix)
 	return viper.BindEnv(name)
-}
-
-func parsePostgresEnv() error {
-
-	if err := viper.BindEnv("postgres.host", "POSTGRES_HOST"); err != nil {
-		return err
-	}
-
-	if err := viper.BindEnv("postgres.port", "POSTGRES_PORT"); err != nil {
-		return err
-	}
-
-	if err := viper.BindEnv("postgres.db", "POSTGRES_DB"); err != nil {
-		return err
-	}
-
-	if err := viper.BindEnv("postgres.user", "POSTGRES_USER"); err != nil {
-		return err
-	}
-
-	if err := viper.BindEnv("postgres.password", "POSTGRES_PASSWORD"); err != nil {
-		return err
-	}
-
-	return viper.BindEnv("postgres.sslmode", "POSTGRES_SSLMODE")
-}
-
-func parseMongoEnv() error {
-	if err := viper.BindEnv("mongo.host", "MONGO_HOST"); err != nil {
-		return err
-	}
-
-	if err := viper.BindEnv("mongo.port", "MONGO_PORT"); err != nil {
-		return err
-	}
-
-	if err := viper.BindEnv("mongo.db", "MONGO_DB"); err != nil {
-		return err
-	}
-
-	if err := viper.BindEnv("mongo.user", "MONGO_INITDB_ROOT_USERNAME"); err != nil {
-		return err
-	}
-
-	return viper.BindEnv("mongo.password", "MONGO_INITDB_ROOT_PASSWORD")
 }
 
 func parseMailEnv() error {
@@ -154,14 +89,6 @@ func parseMailEnv() error {
 }
 
 func unmarshalConfig(cfg *Config) error {
-	if err := viper.UnmarshalKey("mongo", &cfg.Mongo); err != nil {
-		return err
-	}
-
-	if err := viper.UnmarshalKey("postgres", &cfg.Postgres); err != nil {
-		return err
-	}
-
 	if err := viper.UnmarshalKey("grpc", &cfg.Grpc); err != nil {
 		return err
 	}
@@ -170,22 +97,10 @@ func unmarshalConfig(cfg *Config) error {
 }
 
 func setFromEnv(cfg *Config) {
-	cfg.Postgres.Host = viper.GetString("postgres.host")
-	cfg.Postgres.Port = viper.GetString("postgres.port")
-	cfg.Postgres.DB = viper.GetString("postgres.db")
-	cfg.Postgres.User = viper.GetString("postgres.user")
-	cfg.Postgres.Password = viper.GetString("postgres.password")
-
 	cfg.Mail.ServerName = viper.GetString("mail.server")
 	cfg.Mail.Username = viper.GetString("mail.user")
 	cfg.Mail.Password = viper.GetString("mail.password")
 	cfg.Mail.SenderAddress = viper.GetString("mail.sender.address")
-
-	cfg.Mongo.Host = viper.GetString("mongo.host")
-	cfg.Mongo.Port = viper.GetString("mongo.port")
-	cfg.Mongo.User = viper.GetString("mongo.user")
-	cfg.Mongo.Password = viper.GetString("mongo.password")
-	cfg.Mongo.DB = viper.GetString("mongo.db")
 
 	cfg.Grpc.Port = viper.GetInt("grpc.port")
 }
